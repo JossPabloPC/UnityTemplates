@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MusicManager : PersistentSingleton<MusicManager>
 {
-
     private Dictionary<string, AudioClip> m_soundFXDictionary       = null;
     private Dictionary<string, AudioClip> m_soundMusicDictionary    = null;
 
@@ -63,7 +62,7 @@ public class MusicManager : PersistentSingleton<MusicManager>
         base.Awake();
 
         m_backgroundMusic = CreateAudioSource("Music", true);
-        m_backgroundMusic = CreateAudioSource("SFX", false);
+        m_sfxMusic = CreateAudioSource("SFX", false);
 
         MusicVolume = PlayerPrefs.GetFloat(AppPlayerPrefKeys.MUSIC_VOLUME, 0.5f);
         SFXVolume   = PlayerPrefs.GetFloat(AppPlayerPrefKeys.SFX_VOLUME, 0.5f);
@@ -73,13 +72,13 @@ public class MusicManager : PersistentSingleton<MusicManager>
         
 
         AudioClip[] audio_Vector = Resources.LoadAll<AudioClip>(AppPaths.PATH_RESOURCE_SFX);
-        for (int i = 0; i > audio_Vector.Length; i++)
+        for (int i = 0; i < audio_Vector.Length; i++)
         {//Loads clips to the SFX dictionary
             m_soundFXDictionary.Add(audio_Vector[i].name, audio_Vector[i]);
         }
 
-        audio_Vector = Resources.LoadAll<AudioClip>(AppPaths.PATH_RESOURCEMUSIC);
-        for (int i = 0; i > audio_Vector.Length; i++)
+        audio_Vector = Resources.LoadAll<AudioClip>(AppPaths.PATH_RESOURCE_MUSIC);
+        for (int i = 0; i < audio_Vector.Length; i++)
         {//Loads clips to the Music dictionary
             m_soundMusicDictionary.Add(audio_Vector[i].name, audio_Vector[i]);
         }
@@ -109,14 +108,14 @@ public class MusicManager : PersistentSingleton<MusicManager>
     /// <param name="audioName"></param>
     public void PlayMusic (string audioName)
     {
-        if (m_soundFXDictionary.ContainsKey(audioName))
+        if (m_soundMusicDictionary.ContainsKey(audioName))
         {
             m_backgroundMusic.clip = m_soundMusicDictionary[audioName];
             m_backgroundMusic.volume = m_musicVolume;
             m_backgroundMusic.Play();
         }
         else
-            Debug.LogError("No audio called " + audioName + " in " + AppPaths.PATH_RESOURCEMUSIC);
+            Debug.LogError("No audio called " + audioName + " in " + AppPaths.PATH_RESOURCE_MUSIC);
     }
 
     /// <summary>
@@ -127,9 +126,9 @@ public class MusicManager : PersistentSingleton<MusicManager>
     {
         if (m_soundFXDictionary.ContainsKey(audioName))
         {
-            m_backgroundMusic.clip = m_soundMusicDictionary[audioName];
-            m_backgroundMusic.volume = m_musicVolume;
-            m_backgroundMusic.Play();
+            m_sfxMusic.clip = m_soundFXDictionary[audioName];
+            m_sfxMusic.volume = m_musicVolume;
+            m_sfxMusic.Play();
         }
         else
             Debug.LogError("No audio called " + audioName + " in " + AppPaths.PATH_RESOURCE_SFX);
