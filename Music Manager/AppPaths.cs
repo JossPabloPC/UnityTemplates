@@ -12,5 +12,5 @@ public class AppPaths
 public class AppPlayerPrefKeys
 {
     public static readonly string MUSIC_VOLUME = "MUSIC_VOLUME";
-    public static readonly string VFX_VOLUME = "VFX _VOLUME ";
+    public static readonly string SFX_VOLUME = "SFX _VOLUME ";
 }
