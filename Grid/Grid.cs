@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace GridEngine {
-    public class GameGrid
+    public class GameGrid<GridType>
     {
         private int     _width;
         private int     _height;
-        private int [,] _gridArray;
+        private GridType[,] _gridArray;
         private float   _cellSize;
         private Vector3 _originPosition;
 
@@ -16,15 +16,13 @@ namespace GridEngine {
             _width          = width;
             _height         = height;
             _originPosition = originPosition;
-
-            _gridArray = new int[width, height];
-            _cellSize = cellSize;
+            _gridArray      = new GridType[width, height];
+            _cellSize       = cellSize;
 
             for (int x = 0; x < _gridArray.GetLength(0); x++)
             {
                 for (int y = 0; y < _gridArray.GetLength(1); y++)
                 {
-                    _gridArray[x, y] = 0;
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white ,1000f);
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 1000f);
                 }
@@ -51,7 +49,7 @@ namespace GridEngine {
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="value"></param>
-        public void SetValue(int x, int y, int value)
+        public void SetValue(int x, int y, GridType value)
         {
             if( x >= 0 && x < _width && y >= 0 && y < _height)
                 _gridArray[x, y] = value;
@@ -62,7 +60,7 @@ namespace GridEngine {
         /// </summary>
         /// <param name="worldPosition"></param>
         /// <param name="value"></param>
-        public void SetValue(Vector3 worldPosition, int value)
+        public void SetValue(Vector3 worldPosition, GridType value)
         {
             int x, y;
             GetXY(worldPosition, out x, out y);
@@ -72,15 +70,15 @@ namespace GridEngine {
         }
         #endregion
 
-        public int GetValue(int x, int y)
+        public GridType GetValue(int x, int y)
         {
             if (x >= 0 && x < _width && y >= 0 && y < _height)
                 return _gridArray[x, y];
             else 
-                return -1;
+                return default(GridType);
         }
 
-        public int GetValue(Vector3 worldPos)
+        public GridType GetValue(Vector3 worldPos)
         {
             int x, y;
             GetXY(worldPos, out x, out y);
